@@ -51,15 +51,26 @@ public class GameController {
         }
     }
 
-    private void playRound() {
-        Card c1 = pickCard(player1);
-        Card c2 = pickCard(player2);
-        RoundResult result = resolver.resolve(c1, c2, player1, player2);
-        if (!result.isDraw()) result.getWinner().addPoint();
-        view.showRoundResult(result);
-        view.showScores(player1, player2);
-    }
+    
+    	private void playRound() {
+    	    Card c1 = pickCard(player1);
+    	    Card c2 = pickCard(player2);
 
+    	    RoundResult result = resolver.resolve(c1, c2, player1, player2);
+    	    if (!result.isDraw()) result.getWinner().addPoint();
+
+    	    String winner = result.isDraw() ? "draw"
+    	        : result.getWinner() == player1 ? player1.getName() : player2.getName();
+
+    	    view.showDuel(
+    	        player1.getName(), c1.getPokedexId(), c1.getElement().name(), c1.getValue(),
+    	        player2.getName(), c2.getPokedexId(), c2.getElement().name(), c2.getValue(),
+    	        winner
+    	    );
+
+    	    view.showRoundResult(result);
+    	    view.showScores(player1, player2);
+    	}
     private Card pickCard(Player player) {
         List<Integer> ids = new ArrayList<>();
         for (int i = 0; i < player.getHand().size(); i++)
